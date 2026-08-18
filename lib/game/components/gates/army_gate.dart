@@ -16,7 +16,7 @@ class ArmyGate extends RectangleComponent with CollisionCallbacks {
     required this.type,
   }) : super(
     position: position,
-    size: Vector2(100, 60),
+    size: Vector2(75, 55),
     anchor: Anchor.center,
     paint: Paint()..color = const Color(0xFF36D17D),
   );
@@ -25,14 +25,15 @@ class ArmyGate extends RectangleComponent with CollisionCallbacks {
   final ArmyGateType type;
 
   bool _used = false;
+
   static const double speed = 100;
 
   String get label {
     if (type == ArmyGateType.add) {
-      return '+$value SOLDIERS';
+      return '+$value';
     }
 
-    return 'x$value ARMY';
+    return 'x$value';
   }
 
   @override
@@ -49,7 +50,7 @@ class ArmyGate extends RectangleComponent with CollisionCallbacks {
         textRenderer: TextPaint(
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 14,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),

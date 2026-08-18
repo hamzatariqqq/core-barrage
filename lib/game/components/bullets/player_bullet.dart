@@ -2,6 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../bosses/basic_boss.dart';
 import '../enemies/basic_enemy.dart';
 
 class PlayerBullet extends RectangleComponent with CollisionCallbacks {
@@ -42,6 +43,11 @@ class PlayerBullet extends RectangleComponent with CollisionCallbacks {
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is BasicEnemy) {
+      other.takeDamage(damage);
+      removeFromParent();
+    }
+
+    if (other is BasicBoss) {
       other.takeDamage(damage);
       removeFromParent();
     }
