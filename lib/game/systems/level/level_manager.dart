@@ -1,21 +1,20 @@
 class LevelManager {
-  double elapsedTime = 0;
+  LevelManager();
+
+  double _elapsedTime = 0;
+
+  double get elapsedTime =>
+      _elapsedTime;
 
   void update(double dt) {
-    elapsedTime += dt;
+    if (dt <= 0) {
+      return;
+    }
+
+    _elapsedTime += dt;
   }
 
-  int get stage {
-    if (elapsedTime < 15) return 1;
-    if (elapsedTime < 30) return 2;
-    if (elapsedTime < 45) return 3;
-
-    return 4; // Boss stage
+  void reset() {
+    _elapsedTime = 0;
   }
-
-  double get progress {
-    return (elapsedTime / 45).clamp(0.0, 1.0);
-  }
-
-  bool get bossStage => elapsedTime >= 45;
 }

@@ -2,17 +2,16 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
-class VictoryOverlay extends PositionComponent {
-  VictoryOverlay({
+class DefeatOverlay extends PositionComponent {
+  DefeatOverlay({
     required Vector2 gameSize,
-    required this.onPlayAgain,
+    required this.onRetry,
   }) : super(
-    position: Vector2.zero(),
     size: gameSize,
     priority: 1000,
   );
 
-  final void Function() onPlayAgain;
+  final VoidCallback onRetry;
 
   @override
   Future<void> onLoad() async {
@@ -21,19 +20,19 @@ class VictoryOverlay extends PositionComponent {
     add(
       RectangleComponent(
         size: size,
-        paint: Paint()..color = Colors.black.withValues(alpha: 0.80),
+        paint: Paint()..color = Colors.black.withValues(alpha: 0.75),
       ),
     );
 
     add(
       TextComponent(
-        text: 'VICTORY!',
+        text: 'DEFEAT',
         position: Vector2(size.x / 2, size.y / 2 - 70),
         anchor: Anchor.center,
         textRenderer: TextPaint(
           style: const TextStyle(
-            color: Colors.greenAccent,
-            fontSize: 38,
+            color: Colors.redAccent,
+            fontSize: 42,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -41,40 +40,26 @@ class VictoryOverlay extends PositionComponent {
     );
 
     add(
-      TextComponent(
-        text: 'BOSS DEFEATED',
-        position: Vector2(size.x / 2, size.y / 2 - 20),
-        anchor: Anchor.center,
-        textRenderer: TextPaint(
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
-        ),
-      ),
-    );
-
-    add(
-      _PlayAgainButton(
-        position: Vector2(size.x / 2, size.y / 2 + 50),
-        onPressed: onPlayAgain,
+      RetryButton(
+        position: Vector2(size.x / 2, size.y / 2 + 20),
+        onRetry: onRetry,
       ),
     );
   }
 }
 
-class _PlayAgainButton extends RectangleComponent with TapCallbacks {
-  _PlayAgainButton({
+class RetryButton extends RectangleComponent with TapCallbacks {
+  RetryButton({
     required Vector2 position,
-    required this.onPressed,
+    required this.onRetry,
   }) : super(
     position: position,
-    size: Vector2(150, 50),
+    size: Vector2(150, 55),
     anchor: Anchor.center,
-    paint: Paint()..color = const Color(0xFF2D8CFF),
+    paint: Paint()..color = const Color(0xFF238BFF),
   );
 
-  final void Function() onPressed;
+  final VoidCallback onRetry;
 
   @override
   Future<void> onLoad() async {
@@ -82,13 +67,13 @@ class _PlayAgainButton extends RectangleComponent with TapCallbacks {
 
     add(
       TextComponent(
-        text: 'PLAY AGAIN',
+        text: 'RETRY',
         position: size / 2,
         anchor: Anchor.center,
         textRenderer: TextPaint(
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -97,7 +82,7 @@ class _PlayAgainButton extends RectangleComponent with TapCallbacks {
   }
 
   @override
-  void onTapUp(TapUpEvent event) {
-    onPressed();
+  void onTapDown(TapDownEvent event) {
+    onRetry();
   }
 }

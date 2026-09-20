@@ -1,63 +1,148 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 
-class ScrollingBattlefield extends PositionComponent
-    with HasGameReference<FlameGame> {
+class ScrollingBattlefield extends PositionComponent {
   ScrollingBattlefield({
     required this.gameSize,
   }) : super(
+    position: Vector2.zero(),
     size: gameSize,
-    priority: -100,
+    priority: -1000,
   );
 
   final Vector2 gameSize;
 
-  late SpriteComponent background1;
-  late SpriteComponent background2;
+  Sprite? _roadSprite;
 
-  static const double scrollSpeed = 90;
+  double _scrollY = 0.0;
+
+  static const double _scrollSpeed = 95.0;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final image = await game.images.load(
-      'environment/battlefield/battlefield_01.png',
+    _roadSprite = await Sprite.load(
+      'ui/gameplay/desert_road_seamless.png',
     );
-
-    final sprite = Sprite(image);
-
-    background1 = SpriteComponent(
-      sprite: sprite,
-      position: Vector2(0, 0),
-      size: gameSize,
-    );
-
-    background2 = SpriteComponent(
-      sprite: sprite,
-      position: Vector2(0, -gameSize.y),
-      size: gameSize,
-    );
-
-    add(background1);
-    add(background2);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    background1.position.y += scrollSpeed * dt;
-    background2.position.y += scrollSpeed * dt;
+    _scrollY += _scrollSpeed * dt;
 
-    if (background1.position.y >= gameSize.y) {
-      background1.position.y =
-          background2.position.y - gameSize.y;
+    if (_scrollY >= gameSize.y) {
+      _scrollY -= gameSize.y;
+    }
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    final sprite = _roadSprite;
+
+    if (sprite == null) {
+      _drawFallback(canvas);
+      return;
     }
 
-    if (background2.position.y >= gameSize.y) {
-      background2.position.y =
-          background1.position.y - gameSize.y;
-    }
+    // Tile currently on screen.
+    sprite.render(
+      canvas,
+      position: Vector2(
+        0,
+        _scrollY,
+      ),
+      size: Vector2(
+        gameSize.x,
+        gameSize.y + 2,
+      ),
+    );
+
+    // Second identical tile directly above it.
+    sprite.render(
+      canvas,
+      position: Vector2(
+        0,
+        _scrollY - gameSize.y,
+      ),
+      size: Vector2(
+        gameSize.x,
+        gameSize.y + 2,
+      ),
+    );
+
+    _drawVignette(canvas);
+  }
+
+  void _drawVignette(Canvas canvas) {
+    final rect = Rect.fromLTWH(
+      0,
+      0,
+      gameSize.x,
+      gameSize.y,
+    );
+
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            Color(0x30000000),
+            Colors.transparent,
+            Colors.transparent,
+            Color(0x30000000),
+          ],
+          stops: [
+            0.0,
+            0.10,
+            0.90,
+            1.0,
+          ],
+        ).createShader(rect),
+    );
+
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0x16000000),
+            Colors.transparent,
+            Colors.transparent,
+            Color(0x38000000),
+          ],
+          stops: [
+            0.0,
+            0.18,
+            0.72,
+            1.0,
+          ],
+        ).createShader(rect),
+    );
+  }
+
+  void _drawFallback(Canvas canvas) {
+    final rect = Rect.fromLTWH(
+      0,
+      0,
+      gameSize.x,
+      gameSize.y,
+    );
+
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..color = const Color(
+          0xFF3B3F43,
+        ),
+    );
   }
 }

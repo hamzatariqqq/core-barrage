@@ -14,21 +14,87 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flame: ^1.38.0
+  shared_preferences: ^2.5.5
+  flame_audio: ^2.12.2
+  google_mobile_ads: ^9.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/player/blue_soldier.png
-    - assets/images/player/run/blue_soldier_run.png
-    - assets/images/enemies/basic/red_enemy_run.png
-    - assets/images/bosses/level_1/boss_run.png
-    - assets/images/environment/battlefield/battlefield_01.png
-    - assets/images/player/vehicle/blue_vehicle.png
-    - assets/images/effects/combat/muzzle_flash.png
+    # ============================================================
+    # PLAYER
+    # ============================================================
+    - assets/images/player/
+    - assets/images/player/run/
+    - assets/images/player/vehicle/
+
+    # ============================================================
+    # LEVEL BACKGROUNDS - LEVEL 01 TO LEVEL 15
+    # ============================================================
+    - assets/images/levels/
+
+    # ============================================================
+    # ENEMIES - ENEMY 01 TO ENEMY 15
+    # ============================================================
+    - assets/images/enemies/
+
+    # Existing animated enemy
+    - assets/images/enemies/basic/
+
+    # ============================================================
+    # BOSSES - BOSS 01 TO BOSS 15
+    # ============================================================
+    - assets/images/bosses/
+
+    # Existing animated Level 1 boss
+    - assets/images/bosses/level_1/
+
+    # ============================================================
+    # ENVIRONMENT
+    # ============================================================
+    - assets/images/environment/battlefield/
+
+    # ============================================================
+    # COMBAT EFFECTS
+    # ============================================================
+    - assets/images/effects/combat/
+
+    # ============================================================
+    # HOME UI
+    # ============================================================
+    - assets/images/ui/home/
+
+    # ============================================================
+    # SPLASH SCREEN / APP ICON
+    # ============================================================
+    - assets/images/ui/splash/
+    - assets/images/ui/app_icon.png
+
+    # ============================================================
+    # CAMPAIGN UI
+    # ============================================================
+    - assets/images/ui/campaign/
+
+    # ============================================================
+    # GAMEPLAY UI / ROAD
+    # ============================================================
+    - assets/images/ui/gameplay/
+
+    # ============================================================
+    # AUDIO
+    # ============================================================
+    - assets/audio/sfx/
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/ui/app_icon.png"
+  min_sdk_android: 21
